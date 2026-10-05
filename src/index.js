@@ -22,6 +22,7 @@ import versionsPlugin from './plugins/versions'
 import bannerFooter from './plugins/banner-footer'
 import darkThemeToggler from './plugins/dark-theme-toggler'
 import searchPlugin from './plugins/search'
+import localSearch from './plugins/search/localSearch'
 
 Vue.component(ImageZoom.name, ImageZoom)
 Vue.component(Badge.name, Badge)
@@ -100,6 +101,7 @@ class Docute {
 }
 
 Docute.version = __DOCUTE_VERSION__
+Docute.localSearch = localSearch
 
 export default Docute
 
