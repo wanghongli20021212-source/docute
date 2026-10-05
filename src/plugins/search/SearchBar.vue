@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       result: [],
+      searchId: 0,
       focused: false
     }
   },
@@ -52,6 +53,8 @@ export default {
   watch: {
     '$route.fullPath'() {
       this.focused = false
+      this.searchId++
+      this.result = []
     }
   },
 
@@ -79,10 +82,21 @@ export default {
       }
     },
 
-    handleSearch: debounce(300, async function(e) {
-      const {handler} = this.$pluginApi.search
-      this.result = await handler(e.target.value)
+    handleSearch(e) {
+      const searchId = ++this.searchId
+      this.debouncedSearch(e.target.value, searchId)
+    },
+
+    debouncedSearch: debounce(300, function(keyword, searchId) {
+      this.search(keyword, searchId)
     }),
+
+    async search(keyword, searchId) {
+      if (searchId !== this.searchId) return
+      const {handler} = this.$pluginApi.search
+      const result = await handler(keyword)
+      if (searchId === this.searchId) this.result = result
+    },
 
     toggleFocus(focused) {
       this.focused = focused
